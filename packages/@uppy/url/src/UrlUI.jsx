@@ -18,7 +18,8 @@ class UrlUI extends Component {
   }
 
   render () {
-    const { i18n } = this.props
+    const { i18n, error } = this.props
+    console.log('error received to component!!', { error })
     return (
       <div className="uppy-Url">
         <input

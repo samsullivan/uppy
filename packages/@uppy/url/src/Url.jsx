@@ -106,6 +106,10 @@ export default class Url extends UIPlugin {
   }
 
   async addFile (protocollessUrl, optionalMeta = undefined) {
+    this.uppy.setMeta({
+      urlPluginError: undefined,
+    });
+
     const url = addProtocolToURL(protocollessUrl)
     if (!checkIfCorrectURL(url)) {
       this.uppy.log(`[URL] Incorrect URL entered: ${url}`)
@@ -148,6 +152,9 @@ export default class Url extends UIPlugin {
         return err
       }
     } catch (err) {
+      this.uppy.setMeta({
+        urlPluginError: err.message,
+      });
       this.uppy.log(err)
       this.uppy.info({
         message: this.i18n('failedToFetch'),
@@ -171,8 +178,9 @@ export default class Url extends UIPlugin {
     })
   }
 
-  render () {
-    return <UrlUI i18n={this.i18n} addFile={this.addFile} />
+  async render () {
+    const meta = this.uppy.getMeta()
+    return <UrlUI i18n={this.i18n} addFile={this.addFile} error={meta?.urlPluginError} />
   }
 
   install () {
